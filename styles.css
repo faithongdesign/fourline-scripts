@@ -88,6 +88,17 @@ html {
 
 
 /* ============================================
+   SECTION: Lenis Smooth Scroll
+   ============================================ */
+
+/* Lenis core styles are loaded via CDN (lenis.css).
+   Below are project-specific overrides only. */
+html.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+
+/* ============================================
    SECTION: Works Carousel
    ============================================ */
 

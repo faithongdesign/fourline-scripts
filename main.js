@@ -1,8 +1,81 @@
 /* ============================================
    FOURLINE — Custom Scripts
    Served via jsDelivr CDN from GitHub
-   Requires: GSAP 3.12.5 + ScrollTrigger
+   Requires: GSAP 3.12.5 + ScrollTrigger + Lenis 1.3.17
    ============================================ */
+
+
+/* ============================================
+   SECTION: Lenis Smooth Scroll
+   Requires: lenis@1.3.17 loaded via CDN before this file
+   ============================================ */
+
+(function() {
+  // Skip Lenis on pure touch devices (phones/tablets).
+  // Native iOS/Android momentum scroll already feels natural.
+  var isTouchDevice = ('ontouchstart' in window) ||
+                      (navigator.maxTouchPoints > 0);
+  var hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+  var hasFinePointer   = window.matchMedia('(pointer: fine)').matches;
+
+  if (isTouchDevice && hasCoarsePointer && !hasFinePointer) {
+    console.log('Fourline: Lenis skipped (touch device)');
+    return;
+  }
+
+  if (typeof Lenis === 'undefined') {
+    console.warn('Fourline: Lenis not loaded, smooth scroll disabled');
+    return;
+  }
+
+  var lenis = new Lenis({
+    duration:        1.4,
+    easing:          function(t) {
+      return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+    },
+    smoothWheel:     true,
+    wheelMultiplier: 0.9,
+    syncTouch:       false,
+    autoRaf:         false,
+
+    // Let Lenis ignore horizontal wheel gestures inside the carousel
+    // but still smooth vertical scroll everywhere.
+    virtualScroll: function(e) {
+      var isInsideCarousel = e.event.target &&
+        e.event.target.closest &&
+        !!e.event.target.closest('.works-carousel');
+
+      if (!isInsideCarousel) return true;
+
+      var absX = Math.abs(e.deltaX);
+      var absY = Math.abs(e.deltaY);
+
+      // Horizontal gesture in carousel — let carousel handle it
+      if (absX > absY) return false;
+
+      // Vertical gesture in carousel — let Lenis smooth it
+      return true;
+    }
+  });
+
+  // Sync Lenis with GSAP ScrollTrigger
+  lenis.on('scroll', function() {
+    if (typeof ScrollTrigger !== 'undefined') {
+      ScrollTrigger.update();
+    }
+  });
+
+  // Drive Lenis through GSAP's ticker (single RAF loop)
+  gsap.ticker.add(function(time) {
+    lenis.raf(time * 1000);
+  });
+  gsap.ticker.lagSmoothing(0);
+
+  // Expose globally for nav overlay stop/start
+  window._fourlineLenis = lenis;
+
+  console.log('Fourline: Lenis smooth scroll initialized');
+})();
 
 
 /* ============================================
