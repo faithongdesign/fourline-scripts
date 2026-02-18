@@ -1,0 +1,283 @@
+/* ============================================
+   FOURLINE — Custom Styles
+   Served via jsDelivr CDN from GitHub
+   ============================================ */
+
+
+/* ============================================
+   SECTION: Glow Lines Animation
+   ============================================ */
+
+/* Vertical grid line glow */
+.vertical-line {
+  position: relative !important;
+  overflow: hidden !important;
+}
+.vertical-line::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: -25px;
+  width: 51px;
+  height: 40%;
+  background: linear-gradient(180deg, transparent 0%, rgba(220,225,235,0) 8%, rgba(220,225,235,0.3) 35%, rgba(255,255,255,0.8) 50%, rgba(220,225,235,0.3) 65%, rgba(220,225,235,0) 92%, transparent 100%);
+  filter: blur(10px);
+  animation: glowDown 8s ease-in-out infinite;
+}
+.vertical-line:nth-child(2)::before {
+  animation-delay: -4s;
+  animation-duration: 10s;
+}
+
+/* Horizontal grid line glow */
+.horizontal-line {
+  position: relative !important;
+  overflow: hidden !important;
+}
+.horizontal-line::before {
+  content: '';
+  position: absolute;
+  left: -30%;
+  top: -25px;
+  height: 51px;
+  width: 30%;
+  background: linear-gradient(90deg, transparent 0%, rgba(220,225,235,0) 8%, rgba(220,225,235,0.3) 35%, rgba(255,255,255,0.8) 50%, rgba(220,225,235,0.3) 65%, rgba(220,225,235,0) 92%, transparent 100%);
+  filter: blur(10px);
+  animation: glowAcross 12s ease-in-out infinite;
+}
+.horizontal-line:nth-child(2)::before {
+  animation-delay: -6s;
+  animation-duration: 14s;
+  animation-direction: reverse;
+}
+
+@keyframes glowDown {
+  0% { top: -40%; opacity: 0; }
+  5% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 110%; opacity: 0; }
+}
+@keyframes glowAcross {
+  0% { left: -30%; opacity: 0; }
+  5% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: 110%; opacity: 0; }
+}
+
+
+/* ============================================
+   SECTION: Nav Menu Animation
+   ============================================ */
+
+/* Kill Webflow's default nav menu slide animation */
+.w-nav-menu, .nav-menu {
+  transform: none !important;
+}
+
+
+/* ============================================
+   SECTION: Lock Horizontal Movement
+   ============================================ */
+
+html, body {
+  overscroll-behavior-x: none;
+}
+html {
+  overflow-x: clip; /* blocks horizontal scroll WITHOUT breaking sticky */
+}
+
+
+/* ============================================
+   SECTION: Works Carousel
+   ============================================ */
+
+/* Carousel Viewport */
+.works-carousel {
+  overflow: hidden !important;
+  cursor: grab;
+  width: 100%;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Track */
+.works-track {
+  display: flex !important;
+  width: fit-content !important;
+  will-change: transform;
+  flex-wrap: nowrap !important;
+}
+
+/* Column Wraps */
+.works-column-wrap {
+  flex-shrink: 0 !important;
+}
+
+/* Project Cards: Grayscale to Color */
+.works-column {
+  flex-shrink: 0 !important;
+  filter: grayscale(100%);
+  -webkit-filter: grayscale(100%);
+  transition: filter 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
+              transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  position: relative;
+}
+.works-column:hover {
+  filter: grayscale(0%);
+  -webkit-filter: grayscale(0%);
+  transform: scale(1.02);
+}
+
+/* Optional: "View Project" hover pill */
+.works-column:hover::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Featured project image opacity */
+.works-column .featured-project-image {
+  opacity: 0.6;
+  transition: opacity 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* When ANY card is hovered, dim ALL images to 0.4 */
+.works-track:hover .featured-project-image {
+  opacity: 0.4;
+}
+
+/* Then brighten the one actually being hovered to 0.75 */
+.works-column:hover .featured-project-image {
+  opacity: 0.75;
+}
+
+
+/* ============================================
+   SECTION: Custom Cursor
+   ============================================ */
+
+/* Cursor dot container */
+.cursor-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  will-change: transform;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.cursor-follower.is-carousel {
+  opacity: 1;
+}
+
+/* White dot */
+.cursor-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+/* Triangles */
+.cursor-arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.cursor-arrow-left {
+  border-width: 7px 9px 7px 0;
+  border-color: transparent #ffffff transparent transparent;
+  transform: translateX(6px);
+}
+
+.cursor-arrow-right {
+  border-width: 7px 0 7px 9px;
+  border-color: transparent transparent transparent #ffffff;
+  transform: translateX(-6px);
+}
+
+/* Show arrows in carousel */
+.cursor-follower.is-carousel .cursor-arrow {
+  opacity: 1;
+}
+.cursor-follower.is-carousel .cursor-arrow-left {
+  transform: translateX(-5px);
+}
+.cursor-follower.is-carousel .cursor-arrow-right {
+  transform: translateX(5px);
+}
+
+/* Dragging */
+.cursor-follower.is-dragging .cursor-dot {
+  transform: scale(0.7);
+}
+.cursor-follower.is-dragging .cursor-arrow-left {
+  transform: translateX(-9px);
+}
+.cursor-follower.is-dragging .cursor-arrow-right {
+  transform: translateX(9px);
+}
+
+/* Hide on touch */
+@media (hover: none) {
+  .cursor-follower { display: none !important; }
+}
+
+
+/* ============================================
+   SECTION: Nav Links Hover
+   ============================================ */
+
+/* Add transition to all nav links */
+.nav-link-row a {
+  transition: opacity 0.7s ease;
+}
+
+/* When hovering over the nav link wrapper, dim all links */
+.nav-link-wrap:hover .nav-link-row a {
+  opacity: 0.3;
+}
+
+/* Restore full opacity to the hovered link */
+.nav-link-wrap:hover .nav-link-row a:hover {
+  opacity: 1;
+}
+
+/* Add transition to all social icons */
+.social-icon {
+  transition: opacity 0.7s ease;
+}
+
+/* When hovering over the social wrap, dim all icons */
+.nav-social-wrap:hover .social-icon {
+  opacity: 0.3;
+}
+
+/* Restore full opacity to the hovered icon */
+.nav-social-wrap:hover .social-icon:hover {
+  opacity: 1;
+}
+
+
+/* ============================================
+   SECTION: Magnetic Text
+   ============================================ */
+
+.magnetic-text {
+  cursor: pointer;
+}
+
+.magnetic-inner {
+  display: inline-block;
+  will-change: transform;
+  pointer-events: none;
+}
